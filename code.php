@@ -28,6 +28,7 @@ if(isset($_POST['save_student']))
             'message' => 'Student added successfully'
         ];
         echo json_encode($res);
+        return false;
     }
     else
     {
@@ -39,4 +40,3 @@ if(isset($_POST['save_student']))
         return false;
     }
 }
-?>

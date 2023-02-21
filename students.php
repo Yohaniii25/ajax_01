@@ -22,6 +22,8 @@
                 <!-- Created form -->
                 <form id="saveStudent">
                     <div class="modal-body">
+
+                        <div class="alert alert-warning d-none"></div>
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
                             <input type="text" class="form-control" name="name" placeholder="Enter full name">
@@ -42,7 +44,7 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="submit" class="btn btn-primary">Save Student</button>
                     </div>
                 </form>
 
@@ -74,34 +76,39 @@
 
 
     <!-- bootstrap bundle with popper-->
-    <script src="https://code.jquery.com/jquery-3.6.3.min.js" ></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" ></script>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
         //Create a student      
-        $(document).on('submit', '#saveStudent', function (e) {
+        $(document).on('submit', '#saveStudent', function(e) {
             e.preventDefault();
 
             var formData = new FormData(this);
             formData.append("save_student", true);
 
             $.ajax({
-                type: 'POST',
-                url: 'code.php',
-                data: 'formData',
+                type: "POST",
+                url: "code.php",
+                data: formData,
                 processData: false,
                 contentType: false,
-                success: function (response) {
+                success: function(response) {
 
                     // You can use jQuery also
                     var res = $.parseJSON(response);
-                    if(res.status == 422) {
+                    if (res.status == 422) {
 
                         $("#errorMessage").removeClass('d-none');
                         $("#errorMessage").text(res.message);
-                        
+
+                    } else if (res.status == 200) {
+
+                        $('#errorMessage').addClass('d-none');
+                        $('#studentAddModal').modal('hide');
+                        $('#saveStudent')[0].reset();
                     }
-                    
+
                 },
 
             })
