@@ -1,5 +1,5 @@
 <?php
-$con = mysqli_connect('localhost', 'root', '', 'ajax01');
+require 'dbcon.php';	
 
 if(isset($_POST['save_student']))
 {

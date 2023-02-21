@@ -54,6 +54,7 @@
         </div>
     </div>
 
+    <br>
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -65,10 +66,48 @@
                             <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#studentAddModal">
                                 Add Student
                             </button>
-                            <a href=""></a>
+                            
                         </h4>
                     </div>
-                    <div class="card-body"></div>
+                    <div class="card-body">
+                    <!-- table table-dark table-striped -->
+                        <table id="myTable" class="table table-primary table-striped">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Course</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <?php
+                            require 'dbcon.php';
+
+                            $query = 'SELECT * FROM students';
+                            $query_run = mysqli_query($con, $query);
+
+                            if (mysqli_num_rows($query_run) > 0) {
+                                foreach ($query_run as $student) { ?>
+                                    <tr>
+                                        <td><?= $student['id'] ?></td>
+                                        <td><?= $student['name'] ?></td>
+                                        <td><?= $student['email'] ?></td>
+                                        <td><?= $student['phone'] ?></td>
+                                        <td><?= $student['course'] ?></td>
+                                        <td>
+                                            <button type="button" class="btn btn-info">Edit</button>
+                                            <button type="button" class="btn btn-warning">Edit</button>
+                                            <button type="button" class="btn btn-danger">Delete</button>
+                                    </tr>
+                                    <?php }
+                            }
+                            ?>
+                             
+                            
+                    </div>
                 </div>
             </div>
         </div>
@@ -107,6 +146,9 @@
                         $('#errorMessage').addClass('d-none');
                         $('#studentAddModal').modal('hide');
                         $('#saveStudent')[0].reset();
+
+                        // view table data without reloading page
+                        $('#myTable').load(location.href + " #myTable");
                     }
 
                 },
