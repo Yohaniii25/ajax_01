@@ -19,6 +19,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
+                <!-- Created form -->
                 <form id="saveStudent">
                     <div class="modal-body">
                         <div class="mb-3">
@@ -44,6 +45,8 @@
                         <button type="submit" class="btn btn-primary">Save changes</button>
                     </div>
                 </form>
+
+                <!-- End of the form -->
 
             </div>
         </div>
@@ -91,6 +94,12 @@
 
                     // You can use jQuery also
                     var res = $.parseJSON(response);
+                    if(res.status == 422) {
+
+                        $("#errorMessage").removeClass('d-none');
+                        $("#errorMessage").text(res.message);
+                        
+                    }
                     
                 },
 
