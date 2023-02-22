@@ -23,7 +23,7 @@
                 <form id="saveStudent">
                     <div class="modal-body">
 
-                        <div class="alert alert-warning d-none"></div>
+                        <div id="errorMessage" class="alert alert-warning d-none"></div>
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
                             <input type="text" class="form-control" name="name" placeholder="Enter full name">
@@ -96,6 +96,44 @@
             </div>
         </div>
     </div>
+
+    <!-- View Student Modal -->
+    <div class="modal fade" id="studentViewModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">View Student</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="mb-3">
+                        <label for="">Name</label>
+                        <p id="view_name" class="form-control"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label for="">Email</label>
+                        <p id="view_email" class="form-control"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label for="">Phone</label>
+                        <p id="view_phone" class="form-control"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label for="">Course</label>
+                        <p id="view_course" class="form-control"></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <br>
 
     <div class="container">
@@ -141,9 +179,9 @@
                                             <td><?= $student['phone'] ?></td>
                                             <td><?= $student['course'] ?></td>
                                             <td>
-                                                <a href="" class="btn btn-info">View</a>
+                                                <button type="button" value="<?= $student['id'] ?>" class="viewStudentBtn btn btn-info">View</button>
                                                 <button type="button" value="<?= $student['id'] ?>" class="editStudentBtn btn btn-warning">Edit</button>
-                                                <a href="" class="btn btn-danger">Delete</a>
+                                                <button type="button" value="<?= $student['id'] ?>" class="deleteStudentBtn btn btn-danger">Delete</button>
                                         </tr>
                                 <?php }
                                 }
@@ -160,6 +198,8 @@
     <!-- bootstrap bundle with popper-->
     <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
 
     <script>
         //Create a student      
@@ -230,8 +270,8 @@
 
         });
 
-        
 
+        // Update a student
         $(document).on('submit', '#updateStudent', function(e) {
             e.preventDefault();
 
@@ -266,6 +306,65 @@
                 },
 
             })
+        });
+
+        // View a student
+        $(document).on('click', '.viewStudentBtn', function() {
+
+            var student_id = $(this).val();
+
+            $.ajax({
+                type: "GET",
+                url: "code.php?student_id=" + student_id,
+                success: function(response) {
+
+                    var res = $.parseJSON(response);
+                    if (res.status == 404) {
+
+                        alert(res.message);
+                    } else if (res.status == 200) {
+
+                        $('#view_name').text(res.data.name);
+                        $('#view_email').text(res.data.email);
+                        $('#view_phone').text(res.data.phone);
+                        $('#view_course').text(res.data.course);
+
+                        $('#studentViewModal').modal('show');
+                    }
+
+                }
+            });
+
+        });
+
+        // deleteStudentBtn
+        $(document).on('click', '.deleteStudentBtn', function(e) {
+            e.preventDefault();
+
+            if (confirm('Are you sure you want to delete this student')) {
+                var student_id = $(this).val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "code.php",
+                    data: {
+
+                        delete_student: true,
+                        'student_id': student_id
+                    },
+                    success: function(response) {
+                        var res = $.parseJSON(response);
+                        if (res.status == 500) {
+
+                            alert(res.message);
+                        } else {
+                            alert(res.message);
+
+                            $('#myTable').load(location.href + " #myTable");
+                        }
+                    }
+                })
+            }
         });
     </script>
 </body>
