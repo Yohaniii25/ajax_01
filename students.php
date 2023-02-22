@@ -5,7 +5,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Ajax crud 01</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
 </head>
 
 <body>
@@ -230,6 +232,9 @@
                         $('#studentAddModal').modal('hide');
                         $('#saveStudent')[0].reset();
 
+                        alertify.set('notifier', 'position', 'top-right');
+                        alertify.success(res.message);
+
                         // view table data without reloading page
                         $('#myTable').load(location.href + " #myTable");
                     }
@@ -299,6 +304,9 @@
                         $('#studentEditModal').modal('hide');
                         $('#updateStudent')[0].reset();
 
+                        alertify.set('notifier', 'position', 'top-right');
+                        alertify.success(res.message);
+
                         // view table data without reloading page
                         $('#myTable').load(location.href + " #myTable");
                     }
@@ -358,7 +366,9 @@
 
                             alert(res.message);
                         } else {
-                            alert(res.message);
+
+                            alertify.set('notifier', 'position', 'top-right');
+                            alertify.success(res.message);
 
                             $('#myTable').load(location.href + " #myTable");
                         }
